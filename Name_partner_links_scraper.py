@@ -12,21 +12,21 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 700)
 
 headers = {
-'Accept' : 'Accept',
-'Accept-Encoding' : 'Accept-Encoding',
-'Accept-Language' : 'Accept-Language',
-'Cache-Control' : 'Cache-Control',
-'Cookie' : 'Cookie',
-'Priority' : 'Priority',
-'Sec-Ch-Ua' : 'Sec-Ch-Ua',
-'Sec-Ch-Ua-Mobile' : 'Sec-Ch-Ua-Mobile',
-'Sec-Ch-Ua-Platform' : 'Sec-Ch-Ua-Platform',
-'Sec-Fetch-Dest' : 'Sec-Fetch-Dest',
-'Sec-Fetch-Mode' : 'Sec-Fetch-Mode',
-'Sec-Fetch-Site' : 'Sec-Fetch-Site',
-'Sec-Fetch-User' : 'Sec-Fetch-User',
-'Upgrade-Insecure-Requests' : 'Upgrade-Insecure-Requests',
-'User-Agent' : 'User-Agent'
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Cache-Control': 'no-cache',
+    'Cookie': 'your-cookie-here',
+    'Priority': 'high',
+    'Sec-Ch-Ua': '"Chromium";v="90", "Google Chrome";v="90", "Not A(Brand";v="99"',
+    'Sec-Ch-Ua-Mobile': '?0',
+    'Sec-Ch-Ua-Platform': '"Windows"',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'none',
+    'Sec-Fetch-User': '?1',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36'
 }
 
 url = f'https://www.astromeridian.ru/imya/'
@@ -67,19 +67,18 @@ for a in a_elements:
 
 # Create Pandas table
 df = pd.DataFrame({
-    # 'h2': h2_data,
-    # 'h4': h4_data,
     'Value': a_text_data,
     'Link': a_href_data
 })
 
+df = df.iloc[13:294]  # Extract a specific range of rows
+df = df.reset_index(drop=True)  # Reset the index
 
-df = df.iloc[13:294]
-df = df.reset_index(drop=True)
-
+# Insert 'Параметр' and 'Пол' columns with default values
 df.insert(loc=0, column='Параметр', value=[None]*len(df))
 df.insert(loc=1, column='Пол', value=[None]*len(df))
 
+# Assign values based on the index ranges
 df.loc[:30, 'Пол'] = 'Женские и Мужские'
 df.loc[:30, 'Параметр'] = 'Имена по буквам'
 
@@ -99,11 +98,7 @@ df.loc[225:249, 'Пол'] = 'Женские'
 df.loc[250:280, 'Пол'] = 'Мужские'
 df.loc[225:280, 'Параметр'] = 'Имена по значению'
 
-df
-
+# Save the dataframe to CSV
 df.to_csv(r'C:\Users\aleksandra.babkina\Desktop\Список_ссылок_с_именами_с_сайта.csv', index=False)
 
-df.to_csv(r'Список_ссылок_с_именами_с_сайта.csv', index=False)
-
-
-
+df
